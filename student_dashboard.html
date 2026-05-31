@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard - Lab Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>🔬 LabNexus — Student Dashboard</h2>
+    <span>
+        Welcome, <strong id="user-name">Student</strong> &nbsp;|&nbsp;
+        <button onclick="logout()">Logout</button>
+    </span>
+</div>
+
+<!-- LAYOUT -->
+<div class="page-wrapper">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <a href="#" class="active" onclick="showSection('overview', this)">🏠 Overview</a>
+        <a href="#" onclick="showSection('timetable', this)">📅 Timetable</a>
+        <a href="#" onclick="showSection('notes', this)">📚 Notes</a>
+        <a href="#" onclick="showSection('notifications', this)">🔔 Notifications</a>
+        <a href="#" onclick="showSection('search', this)">🔍 Search</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- ========== OVERVIEW ========== -->
+        <div id="sec-overview">
+            <div class="page-title">Overview</div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">Labs Today</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Notes Available</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Labs This Week</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">New Notifications</div>
+                </div>
+            </div>
+
+            <div class="two-col">
+
+                <!-- Today's Schedule -->
+                <div class="card">
+                    <h3>📅 Today's Schedule</h3>
+
+                    <div class="upcoming-item">
+                        <div class="upcoming-dot" style="background-color:#1a73e8;"></div>
+                        <div>
+                            <strong>DBMS Lab</strong><br>
+                            <span style="font-size:12px;color:#666;">9:00 – 10:00 &nbsp;|&nbsp; Lab 101</span>
+                        </div>
+                    </div>
+
+                    <div class="upcoming-item">
+                        <div class="upcoming-dot" style="background-color:#28a745;"></div>
+                        <div>
+                            <strong>OS Lab</strong><br>
+                            <span style="font-size:12px;color:#666;">12:00 – 13:00 &nbsp;|&nbsp; Lab 102</span>
+                        </div>
+                    </div>
+
+                    <div class="upcoming-item">
+                        <div class="upcoming-dot" style="background-color:#ffc107;"></div>
+                        <div>
+                            <strong>CN Lab</strong> <span style="font-size:12px;color:#999;">(Tomorrow)</span><br>
+                            <span style="font-size:12px;color:#666;">10:00 – 11:00 &nbsp;|&nbsp; Lab 103</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notifications Preview -->
+                <div class="card">
+                    <h3>🔔 Recent Notifications</h3>
+
+                    <div class="notif-item">
+                        <div class="notif-title">Lab Rescheduled</div>
+                        <div class="notif-sub">DBMS Lab moved to Thursday 10–11</div>
+                        <div class="notif-time">2 hours ago</div>
+                    </div>
+
+                    <div class="notif-item green">
+                        <div class="notif-title">Notes Uploaded</div>
+                        <div class="notif-sub">Dr. Suresh uploaded SQL Unit 3</div>
+                        <div class="notif-time">Yesterday</div>
+                    </div>
+
+                    <div class="notif-item yellow">
+                        <div class="notif-title">Assignment Due</div>
+                        <div class="notif-sub">OS Lab: Scheduling due May 15</div>
+                        <div class="notif-time">5 hours ago</div>
+                    </div>
+
+                    <br>
+                    <button class="btn-blue" onclick="showSection('notifications', null)" style="font-size:13px;padding:7px 14px;">View All</button>
+                </div>
+
+            </div>
+
+            <!-- Upcoming Labs -->
+            <div class="card">
+                <h3>📅 Upcoming Labs This Week</h3>
+                <table>
+                    <tr>
+                        <th>Day</th>
+                        <th>Time</th>
+                        <th>Subject</th>
+                        <th>Lab</th>
+                    </tr>
+                    <tr><td>Monday</td><td>9:00 – 10:00</td><td>DBMS Lab</td><td>Lab 101</td></tr>
+                    <tr><td>Monday</td><td>12:00 – 13:00</td><td>OS Lab</td><td>Lab 102</td></tr>
+                    <tr><td>Tuesday</td><td>10:00 – 11:00</td><td>CN Lab</td><td>Lab 103</td></tr>
+                    <tr><td>Thursday</td><td>14:00 – 15:00</td><td>Web Tech Lab</td><td>Lab 102</td></tr>
+                    <tr><td>Friday</td><td>9:00 – 10:00</td><td>DS Lab</td><td>Lab 101</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========== TIMETABLE ========== -->
+        <div id="sec-timetable" style="display:none;">
+            <div class="page-title">📅 Lab Timetable</div>
+
+            <div class="card">
+                <!-- Filter Row -->
+                <div style="display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap;">
+                    <div>
+                        <label style="font-size:13px;">Batch:</label>
+                        <select style="width:auto;margin-top:0;padding:7px;" onchange="showToast('Timetable updated!','blue')">
+                            <option>Batch A</option>
+                            <option>Batch B</option>
+                            <option>Batch C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size:13px;">Semester:</label>
+                        <select style="width:auto;margin-top:0;padding:7px;" onchange="showToast('Timetable updated!','blue')">
+                            <option>Semester 4</option>
+                            <option>Semester 3</option>
+                            <option>Semester 5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="legend">
+                    <div class="legend-item">
+                        <span class="slot-free">Free</span> &nbsp;Free slot
+                    </div>
+                    <div class="legend-item">
+                        <span class="slot-busy">Occupied</span> &nbsp;Occupied slot
+                    </div>
+                </div>
+
+                <!-- Timetable Table -->
+                <div style="overflow-x:auto;">
+                    <table class="timetable">
+                        <tr>
+                            <th>Time</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th>Saturday</th>
+                        </tr>
+                        <tr>
+                            <td class="time-col">9:00–10:00</td>
+                            <td><span class="slot-busy">DBMS Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">OS Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">CN Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">10:00–11:00</td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">Web Tech</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">DBMS Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">11:00–12:00</td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">CN Lab</span></td>
+                            <td><span class="slot-busy">Web Tech</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">DBMS Lab</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">12:00–13:00</td>
+                            <td><span class="slot-busy">OS Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">OS Lab</span></td>
+                            <td><span class="slot-busy">Web Tech</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">14:00–15:00</td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">DBMS Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">CN Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">15:00–16:00</td>
+                            <td><span class="slot-busy">CN Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">Web Tech</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">OS Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== NOTES ========== -->
+        <div id="sec-notes" style="display:none;">
+            <div class="page-title">📚 Study Notes</div>
+
+            <!-- Search and Filter -->
+            <div class="search-row">
+                <input type="text" id="note-search" placeholder="Search notes..." oninput="filterNotes()">
+                <select id="note-subject" onchange="filterNotes()">
+                    <option value="">All Subjects</option>
+                    <option>DBMS Lab</option>
+                    <option>OS Lab</option>
+                    <option>CN Lab</option>
+                    <option>Web Tech Lab</option>
+                </select>
+                <select id="note-sem" onchange="filterNotes()">
+                    <option value="">All Semesters</option>
+                    <option>Semester 3</option>
+                    <option>Semester 4</option>
+                    <option>Semester 5</option>
+                </select>
+            </div>
+
+            <!-- Notes Grid -->
+            <div class="notes-grid" id="notes-grid">
+                <div class="note-card" data-subject="DBMS Lab" data-sem="Semester 4">
+                    <h4>📄 SQL Queries — Unit 3</h4>
+                    <p>Subject: DBMS Lab</p>
+                    <p>Semester: Semester 4</p>
+                    <p>By: Dr. Suresh &nbsp;|&nbsp; 2.4MB</p>
+                    <p style="color:#999;font-size:11px;">Uploaded: May 2</p>
+                    <div class="note-btns">
+                        <button class="btn-blue" onclick="showToast('Viewing note...','blue')">View</button>
+                        <button class="btn-green" onclick="showToast('Downloading note...','green')">Download</button>
+                    </div>
+                </div>
+
+                <div class="note-card" data-subject="OS Lab" data-sem="Semester 4">
+                    <h4>📋 Process Scheduling</h4>
+                    <p>Subject: OS Lab</p>
+                    <p>Semester: Semester 4</p>
+                    <p>By: Dr. Meena &nbsp;|&nbsp; 1.8MB</p>
+                    <p style="color:#999;font-size:11px;">Uploaded: Apr 28</p>
+                    <div class="note-btns">
+                        <button class="btn-blue" onclick="showToast('Viewing note...','blue')">View</button>
+                        <button class="btn-green" onclick="showToast('Downloading note...','green')">Download</button>
+                    </div>
+                </div>
+
+                <div class="note-card" data-subject="CN Lab" data-sem="Semester 5">
+                    <h4>📘 TCP/IP Protocols</h4>
+                    <p>Subject: CN Lab</p>
+                    <p>Semester: Semester 5</p>
+                    <p>By: Prof. Rajan &nbsp;|&nbsp; 3.1MB</p>
+                    <p style="color:#999;font-size:11px;">Uploaded: Apr 25</p>
+                    <div class="note-btns">
+                        <button class="btn-blue" onclick="showToast('Viewing note...','blue')">View</button>
+                        <button class="btn-green" onclick="showToast('Downloading note...','green')">Download</button>
+                    </div>
+                </div>
+
+                <div class="note-card" data-subject="Web Tech Lab" data-sem="Semester 3">
+                    <h4>📝 HTML5 & CSS3 Notes</h4>
+                    <p>Subject: Web Tech Lab</p>
+                    <p>Semester: Semester 3</p>
+                    <p>By: Dr. Priya &nbsp;|&nbsp; 1.2MB</p>
+                    <p style="color:#999;font-size:11px;">Uploaded: Apr 20</p>
+                    <div class="note-btns">
+                        <button class="btn-blue" onclick="showToast('Viewing note...','blue')">View</button>
+                        <button class="btn-green" onclick="showToast('Downloading note...','green')">Download</button>
+                    </div>
+                </div>
+
+                <div class="note-card" data-subject="DBMS Lab" data-sem="Semester 4">
+                    <h4>📄 Normalization — Unit 4</h4>
+                    <p>Subject: DBMS Lab</p>
+                    <p>Semester: Semester 4</p>
+                    <p>By: Dr. Suresh &nbsp;|&nbsp; 2.0MB</p>
+                    <p style="color:#999;font-size:11px;">Uploaded: Apr 18</p>
+                    <div class="note-btns">
+                        <button class="btn-blue" onclick="showToast('Viewing note...','blue')">View</button>
+                        <button class="btn-green" onclick="showToast('Downloading note...','green')">Download</button>
+                    </div>
+                </div>
+
+                <div class="note-card" data-subject="OS Lab" data-sem="Semester 4">
+                    <h4>📋 Memory Management</h4>
+                    <p>Subject: OS Lab</p>
+                    <p>Semester: Semester 4</p>
+                    <p>By: Dr. Meena &nbsp;|&nbsp; 1.5MB</p>
+                    <p style="color:#999;font-size:11px;">Uploaded: Apr 15</p>
+                    <div class="note-btns">
+                        <button class="btn-blue" onclick="showToast('Viewing note...','blue')">View</button>
+                        <button class="btn-green" onclick="showToast('Downloading note...','green')">Download</button>
+                    </div>
+                </div>
+            </div>
+
+            <p id="no-notes" style="display:none;color:#999;margin-top:15px;">No notes found.</p>
+        </div>
+
+        <!-- ========== NOTIFICATIONS ========== -->
+        <div id="sec-notifications" style="display:none;">
+            <div class="page-title">🔔 Notifications</div>
+
+            <div style="margin-bottom:15px;">
+                <button class="btn-gray" onclick="markAllRead()">Mark All as Read</button>
+            </div>
+
+            <div class="notif-item">
+                <div class="notif-title">Lab Rescheduled</div>
+                <div class="notif-sub">DBMS Lab has been moved to Thursday 10:00 – 11:00</div>
+                <div class="notif-time">2 hours ago</div>
+            </div>
+
+            <div class="notif-item yellow">
+                <div class="notif-title">Assignment Due Soon</div>
+                <div class="notif-sub">OS Lab: Process Scheduling Algorithm due May 15</div>
+                <div class="notif-time">5 hours ago</div>
+            </div>
+
+            <div class="notif-item green">
+                <div class="notif-title">Notes Uploaded</div>
+                <div class="notif-sub">Dr. Suresh uploaded SQL Queries — Unit 3 for DBMS Lab</div>
+                <div class="notif-time">Yesterday</div>
+            </div>
+
+            <div class="notif-item">
+                <div class="notif-title">Slot Booked</div>
+                <div class="notif-sub">Lab 101 has been booked for Monday 9:00 – 10:00 (Batch A)</div>
+                <div class="notif-time">2 days ago</div>
+            </div>
+
+            <div class="notif-item green">
+                <div class="notif-title">Holiday Notice</div>
+                <div class="notif-sub">No lab sessions on 15th May (State Holiday)</div>
+                <div class="notif-time">3 days ago</div>
+            </div>
+        </div>
+
+        <!-- ========== SEARCH ========== -->
+        <div id="sec-search" style="display:none;">
+            <div class="page-title">🔍 Search</div>
+
+            <div class="card">
+                <div class="search-row" style="margin-bottom:10px;">
+                    <input type="text" id="global-search" placeholder="Search notes, subjects, teachers, slots..." oninput="doGlobalSearch()">
+                    <select id="search-type" onchange="doGlobalSearch()">
+                        <option value="">All Types</option>
+                        <option value="note">Notes</option>
+                        <option value="teacher">Teachers</option>
+                        <option value="batch">Batches</option>
+                        <option value="slot">Slots</option>
+                    </select>
+                </div>
+
+                <div id="search-results">
+                    <p style="color:#999;font-size:13px;">Start typing to see results...</p>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /main-content -->
+</div><!-- /page-wrapper -->
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+    // Set username from localStorage
+    var user = localStorage.getItem("lms_user") || "Student";
+    document.getElementById("user-name").textContent = user;
+
+    // Check role
+    var role = localStorage.getItem("lms_role");
+    if (role && role !== "student") {
+        window.location.href = "teacher_dashboard.html";
+    }
+
+    // Section switching
+    function showSection(name, link) {
+        var sections = ["overview","timetable","notes","notifications","search"];
+        for (var i = 0; i < sections.length; i++) {
+            document.getElementById("sec-" + sections[i]).style.display = "none";
+        }
+        document.getElementById("sec-" + name).style.display = "block";
+
+        // Update active link
+        var links = document.querySelectorAll(".sidebar a");
+        for (var j = 0; j < links.length; j++) {
+            links[j].classList.remove("active");
+        }
+        if (link) link.classList.add("active");
+    }
+
+    function logout() {
+        localStorage.removeItem("lms_user");
+        localStorage.removeItem("lms_role");
+        window.location.href = "login.html";
+    }
+
+    // Notes filter
+    function filterNotes() {
+        var search  = document.getElementById("note-search").value.toLowerCase();
+        var subject = document.getElementById("note-subject").value;
+        var sem     = document.getElementById("note-sem").value;
+        var cards   = document.querySelectorAll(".note-card");
+        var count   = 0;
+
+        for (var i = 0; i < cards.length; i++) {
+            var card   = cards[i];
+            var text   = card.innerText.toLowerCase();
+            var cardSub = card.getAttribute("data-subject");
+            var cardSem = card.getAttribute("data-sem");
+
+            var matchSearch  = text.includes(search);
+            var matchSubject = (subject === "" || cardSub === subject);
+            var matchSem     = (sem === "" || cardSem === sem);
+
+            if (matchSearch && matchSubject && matchSem) {
+                card.style.display = "block";
+                count++;
+            } else {
+                card.style.display = "none";
+            }
+        }
+
+        document.getElementById("no-notes").style.display = (count === 0) ? "block" : "none";
+    }
+
+    // Mark all notifications read
+    function markAllRead() {
+        showToast("All notifications marked as read!", "green");
+    }
+
+    // Global search data
+    var searchData = [
+        { text: "SQL Queries Unit 3 - DBMS Lab", type: "note" },
+        { text: "Process Scheduling - OS Lab", type: "note" },
+        { text: "TCP/IP Protocols - CN Lab", type: "note" },
+        { text: "HTML5 CSS3 Notes - Web Tech Lab", type: "note" },
+        { text: "Normalization Unit 4 - DBMS Lab", type: "note" },
+        { text: "Dr. Suresh - DBMS Lab", type: "teacher" },
+        { text: "Dr. Meena - OS Lab", type: "teacher" },
+        { text: "Prof. Rajan - CN Lab", type: "teacher" },
+        { text: "Dr. Priya - Web Tech Lab", type: "teacher" },
+        { text: "Batch A - Semester 4", type: "batch" },
+        { text: "Batch B - Semester 4", type: "batch" },
+        { text: "Batch C - Semester 5", type: "batch" },
+        { text: "Lab 101 - Monday 9-10 (Free)", type: "slot" },
+        { text: "Lab 102 - Tuesday 10-11 (Free)", type: "slot" },
+        { text: "Lab 103 - Wednesday 11-12 (Busy)", type: "slot" },
+    ];
+
+    function doGlobalSearch() {
+        var q    = document.getElementById("global-search").value.toLowerCase();
+        var type = document.getElementById("search-type").value;
+        var container = document.getElementById("search-results");
+
+        if (q.length < 2) {
+            container.innerHTML = '<p style="color:#999;font-size:13px;">Start typing to see results...</p>';
+            return;
+        }
+
+        var results = [];
+        for (var i = 0; i < searchData.length; i++) {
+            var item = searchData[i];
+            if (item.text.toLowerCase().includes(q) && (type === "" || item.type === type)) {
+                results.push(item);
+            }
+        }
+
+        if (results.length === 0) {
+            container.innerHTML = '<p style="color:#999;font-size:13px;">No results found for "' + q + '"</p>';
+            return;
+        }
+
+        var icons = { note: "📄", teacher: "👨‍🏫", batch: "👥", slot: "🗓️" };
+        var html = "<p style='font-size:12px;color:#666;margin-bottom:10px;'>" + results.length + " result(s) found</p>";
+        for (var j = 0; j < results.length; j++) {
+            html += '<div style="padding:10px 12px;border:1px solid #eee;border-radius:6px;margin-bottom:8px;display:flex;gap:10px;align-items:center;">';
+            html += '<span style="font-size:20px;">' + (icons[results[j].type] || "📌") + '</span>';
+            html += '<div><div style="font-size:13px;font-weight:bold;">' + results[j].text + '</div>';
+            html += '<div style="font-size:11px;color:#999;">' + results[j].type.charAt(0).toUpperCase() + results[j].type.slice(1) + '</div></div>';
+            html += '</div>';
+        }
+        container.innerHTML = html;
+    }
+
+    // Toast
+    function showToast(msg, type) {
+        var t = document.getElementById("toast");
+        t.textContent = msg;
+        t.className = type || "";
+        t.style.display = "block";
+        setTimeout(function() { t.style.display = "none"; }, 3000);
+    }
+</script>
+
+</body>
+</html>

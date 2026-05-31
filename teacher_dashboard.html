@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Dashboard - Lab Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>🔬 LabNexus — Teacher Dashboard</h2>
+    <span>
+        Welcome, <strong id="user-name">Teacher</strong> &nbsp;|&nbsp;
+        <button onclick="logout()">Logout</button>
+    </span>
+</div>
+
+<!-- LAYOUT -->
+<div class="page-wrapper">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <a href="#" class="active" onclick="showSection('overview', this)">🏠 Overview</a>
+        <a href="#" onclick="showSection('timetable', this)">📅 Timetable</a>
+        <a href="#" onclick="showSection('booking', this)">🗓️ Book Slot</a>
+        <a href="#" onclick="showSection('upload', this)">⬆️ Upload Notes</a>
+        <a href="#" onclick="showSection('notes', this)">📚 Manage Notes</a>
+        <a href="#" onclick="showSection('announce', this)">📢 Announcements</a>
+        <a href="#" onclick="showSection('notifications', this)">🔔 Notifications</a>
+        <a href="#" onclick="showSection('search', this)">🔍 Search</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- ========== OVERVIEW ========== -->
+        <div id="sec-overview">
+            <div class="page-title">Overview</div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-box">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Free Slots Today</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">My Bookings</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Notes Uploaded</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Batches Assigned</div>
+                </div>
+            </div>
+
+            <div class="two-col">
+
+                <!-- Upcoming Bookings -->
+                <div class="card">
+                    <h3>🗓️ My Upcoming Bookings</h3>
+
+                    <div class="upcoming-item">
+                        <div class="upcoming-dot" style="background-color:#1a73e8;"></div>
+                        <div>
+                            <strong>DBMS Lab — Batch A</strong><br>
+                            <span style="font-size:12px;color:#666;">Monday 9:00–10:00 &nbsp;|&nbsp; Lab 101</span>
+                        </div>
+                    </div>
+
+                    <div class="upcoming-item">
+                        <div class="upcoming-dot" style="background-color:#28a745;"></div>
+                        <div>
+                            <strong>DBMS Lab — Batch B</strong><br>
+                            <span style="font-size:12px;color:#666;">Wednesday 11:00–12:00 &nbsp;|&nbsp; Lab 101</span>
+                        </div>
+                    </div>
+
+                    <div class="upcoming-item">
+                        <div class="upcoming-dot" style="background-color:#ffc107;"></div>
+                        <div>
+                            <strong>DBMS Lab — Batch C</strong><br>
+                            <span style="font-size:12px;color:#666;">Friday 14:00–15:00 &nbsp;|&nbsp; Lab 103</span>
+                        </div>
+                    </div>
+
+                    <br>
+                    <button class="btn-blue" onclick="showSection('booking',null)" style="font-size:13px;padding:7px 14px;">Book New Slot</button>
+                </div>
+
+                <!-- Quick View Batches -->
+                <div class="card">
+                    <h3>👥 My Batches</h3>
+
+                    <table>
+                        <tr>
+                            <th>Batch</th>
+                            <th>Semester</th>
+                            <th>Students</th>
+                        </tr>
+                        <tr><td>Batch A</td><td>Sem 4</td><td>30</td></tr>
+                        <tr><td>Batch B</td><td>Sem 4</td><td>28</td></tr>
+                        <tr><td>Batch C</td><td>Sem 5</td><td>25</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Available Slots Quick View -->
+            <div class="card">
+                <h3>🟢 Available Slots Today (Lab 101)</h3>
+                <div class="slot-btn-row">
+                    <div class="slot-btn slot-free-btn" onclick="quickBook('9:00–10:00')">9:00–10:00 Free</div>
+                    <div class="slot-btn slot-busy-btn">10:00–11:00 Busy</div>
+                    <div class="slot-btn slot-free-btn" onclick="quickBook('11:00–12:00')">11:00–12:00 Free</div>
+                    <div class="slot-btn slot-free-btn" onclick="quickBook('12:00–13:00')">12:00–13:00 Free</div>
+                    <div class="slot-btn slot-busy-btn">14:00–15:00 Busy</div>
+                    <div class="slot-btn slot-free-btn" onclick="quickBook('15:00–16:00')">15:00–16:00 Free</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== TIMETABLE ========== -->
+        <div id="sec-timetable" style="display:none;">
+            <div class="page-title">📅 Lab Timetable</div>
+
+            <div class="card">
+                <div style="display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap;">
+                    <div>
+                        <label style="font-size:13px;">Batch:</label>
+                        <select style="width:auto;margin-top:0;padding:7px;" onchange="showToast('Timetable updated!','blue')">
+                            <option>Batch A</option>
+                            <option>Batch B</option>
+                            <option>Batch C</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size:13px;">Semester:</label>
+                        <select style="width:auto;margin-top:0;padding:7px;" onchange="showToast('Timetable updated!','blue')">
+                            <option>Semester 4</option>
+                            <option>Semester 3</option>
+                            <option>Semester 5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="legend">
+                    <div class="legend-item"><span class="slot-free">Free</span> &nbsp;Free slot</div>
+                    <div class="legend-item"><span class="slot-busy">Occupied</span> &nbsp;Occupied slot</div>
+                </div>
+
+                <div style="overflow-x:auto;">
+                    <table class="timetable">
+                        <tr>
+                            <th>Time</th>
+                            <th>Monday</th>
+                            <th>Tuesday</th>
+                            <th>Wednesday</th>
+                            <th>Thursday</th>
+                            <th>Friday</th>
+                            <th>Saturday</th>
+                        </tr>
+                        <tr>
+                            <td class="time-col">9:00–10:00</td>
+                            <td><span class="slot-busy">DBMS Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">OS Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">CN Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">10:00–11:00</td>
+                            <td><span class="slot-busy">OS Lab</span></td>
+                            <td><span class="slot-busy">Web Tech</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">DBMS Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">11:00–12:00</td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">CN Lab</span></td>
+                            <td><span class="slot-busy">Web Tech</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">DBMS Lab</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">12:00–13:00</td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">OS Lab</span></td>
+                            <td><span class="slot-busy">Web Tech</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">14:00–15:00</td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">DBMS Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">CN Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                        </tr>
+                        <tr>
+                            <td class="time-col">15:00–16:00</td>
+                            <td><span class="slot-busy">CN Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">Web Tech</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                            <td><span class="slot-busy">OS Lab</span></td>
+                            <td><span class="slot-free">Free</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== BOOK SLOT ========== -->
+        <div id="sec-booking" style="display:none;">
+            <div class="page-title">🗓️ Book a Lab Slot</div>
+
+            <div class="two-col">
+
+                <!-- Booking Form -->
+                <div class="card">
+                    <h3>New Booking</h3>
+                    <form onsubmit="submitBooking(event)">
+
+                        <div class="form-group">
+                            <label>Lab</label>
+                            <select id="book-lab">
+                                <option value="">-- Select Lab --</option>
+                                <option>Lab 101 — Computer Lab A</option>
+                                <option>Lab 102 — Computer Lab B</option>
+                                <option>Lab 103 — Network Lab</option>
+                                <option>Lab 104 — Hardware Lab</option>
+                            </select>
+                            <div class="error-msg" id="err-lab">Please select a lab.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Semester</label>
+                            <select id="book-sem">
+                                <option value="">-- Select Semester --</option>
+                                <option>Semester 1</option>
+                                <option>Semester 2</option>
+                                <option>Semester 3</option>
+                                <option>Semester 4</option>
+                                <option>Semester 5</option>
+                                <option>Semester 6</option>
+                            </select>
+                            <div class="error-msg" id="err-sem">Please select a semester.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Batch</label>
+                            <select id="book-batch">
+                                <option value="">-- Select Batch --</option>
+                                <option>Batch A</option>
+                                <option>Batch B</option>
+                                <option>Batch C</option>
+                                <option>Batch D</option>
+                            </select>
+                            <div class="error-msg" id="err-batch">Please select a batch.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" id="book-date">
+                            <div class="error-msg" id="err-date">Please select a date.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Time Slot</label>
+                            <select id="book-slot">
+                                <option value="">-- Select Time Slot --</option>
+                                <option>9:00 – 10:00</option>
+                                <option>10:00 – 11:00</option>
+                                <option>11:00 – 12:00</option>
+                                <option>12:00 – 13:00</option>
+                                <option>14:00 – 15:00</option>
+                                <option>15:00 – 16:00</option>
+                            </select>
+                            <div class="error-msg" id="err-slot">Please select a time slot.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Subject / Purpose</label>
+                            <input type="text" id="book-subject" placeholder="e.g. DBMS Lab — Unit 3 Practicals">
+                            <div class="error-msg" id="err-subject">Please enter a subject.</div>
+                        </div>
+
+                        <button type="submit" class="btn-blue" style="width:100%;padding:11px;font-size:14px;">Confirm Booking</button>
+                    </form>
+                </div>
+
+                <!-- My Bookings List -->
+                <div class="card">
+                    <h3>My Bookings</h3>
+                    <table>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Lab</th>
+                            <th>Date/Time</th>
+                            <th>Batch</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr>
+                            <td>DBMS Lab</td>
+                            <td>Lab 101</td>
+                            <td>Mon 9–10</td>
+                            <td>Batch A</td>
+                            <td><button class="btn-red" style="font-size:12px;padding:5px 10px;" onclick="showToast('Booking cancelled!','red')">Cancel</button></td>
+                        </tr>
+                        <tr>
+                            <td>DBMS Lab</td>
+                            <td>Lab 101</td>
+                            <td>Wed 11–12</td>
+                            <td>Batch B</td>
+                            <td><button class="btn-red" style="font-size:12px;padding:5px 10px;" onclick="showToast('Booking cancelled!','red')">Cancel</button></td>
+                        </tr>
+                        <tr>
+                            <td>DBMS Lab</td>
+                            <td>Lab 103</td>
+                            <td>Fri 14–15</td>
+                            <td>Batch C</td>
+                            <td><button class="btn-red" style="font-size:12px;padding:5px 10px;" onclick="showToast('Booking cancelled!','red')">Cancel</button></td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========== UPLOAD NOTES ========== -->
+        <div id="sec-upload" style="display:none;">
+            <div class="page-title">⬆️ Upload Notes</div>
+
+            <div class="two-col">
+
+                <div class="card">
+                    <h3>Upload New Note</h3>
+
+                    <!-- Upload Zone -->
+                    <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+                        📁
+                        <p>Click here to select a file</p>
+                        <p style="font-size:12px;color:#999;">Supports PDF, PPT, DOCX — Max 50MB</p>
+                    </div>
+                    <input type="file" id="file-input" style="display:none;" accept=".pdf,.ppt,.pptx,.doc,.docx" onchange="fileChosen(this)">
+                    <p id="file-name" style="font-size:13px;color:#1a73e8;margin-bottom:15px;"></p>
+
+                    <div class="form-group">
+                        <label>Note Title</label>
+                        <input type="text" id="note-title" placeholder="e.g. Unit 3 — SQL Queries">
+                        <div class="error-msg" id="err-note-title">Please enter a title.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <select id="note-subject-up">
+                            <option value="">-- Select Subject --</option>
+                            <option>DBMS Lab</option>
+                            <option>OS Lab</option>
+                            <option>CN Lab</option>
+                            <option>Web Tech Lab</option>
+                        </select>
+                        <div class="error-msg" id="err-note-subject">Please select a subject.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Semester</label>
+                        <select id="note-sem-up">
+                            <option value="">-- Select Semester --</option>
+                            <option>Semester 3</option>
+                            <option>Semester 4</option>
+                            <option>Semester 5</option>
+                        </select>
+                        <div class="error-msg" id="err-note-sem">Please select a semester.</div>
+                    </div>
+
+                    <button class="btn-green" style="width:100%;padding:11px;font-size:14px;" onclick="uploadNote()">Upload Note</button>
+                </div>
+
+                <!-- My Uploaded Notes -->
+                <div class="card">
+                    <h3>My Uploaded Notes</h3>
+                    <table id="my-notes-table">
+                        <tr>
+                            <th>Title</th>
+                            <th>Subject</th>
+                            <th>Sem</th>
+                            <th>Actions</th>
+                        </tr>
+                        <tr>
+                            <td>SQL Queries — Unit 3</td>
+                            <td>DBMS Lab</td>
+                            <td>Sem 4</td>
+                            <td>
+                                <div class="row-btns">
+                                    <button class="btn-yellow" style="font-size:12px;padding:5px 9px;" onclick="showToast('Editing note...','blue')">Edit</button>
+                                    <button class="btn-red" style="font-size:12px;padding:5px 9px;" onclick="deleteNote(this)">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Process Scheduling</td>
+                            <td>OS Lab</td>
+                            <td>Sem 4</td>
+                            <td>
+                                <div class="row-btns">
+                                    <button class="btn-yellow" style="font-size:12px;padding:5px 9px;" onclick="showToast('Editing note...','blue')">Edit</button>
+                                    <button class="btn-red" style="font-size:12px;padding:5px 9px;" onclick="deleteNote(this)">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Normalization Unit 4</td>
+                            <td>DBMS Lab</td>
+                            <td>Sem 4</td>
+                            <td>
+                                <div class="row-btns">
+                                    <button class="btn-yellow" style="font-size:12px;padding:5px 9px;" onclick="showToast('Editing note...','blue')">Edit</button>
+                                    <button class="btn-red" style="font-size:12px;padding:5px 9px;" onclick="deleteNote(this)">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========== MANAGE NOTES ========== -->
+        <div id="sec-notes" style="display:none;">
+            <div class="page-title">📚 Manage Notes</div>
+
+            <div class="search-row">
+                <input type="text" id="mnote-search" placeholder="Search notes..." oninput="filterMNotes()">
+                <select id="mnote-subject" onchange="filterMNotes()">
+                    <option value="">All Subjects</option>
+                    <option>DBMS Lab</option>
+                    <option>OS Lab</option>
+                    <option>CN Lab</option>
+                    <option>Web Tech Lab</option>
+                </select>
+            </div>
+
+            <div class="card">
+                <table id="manage-notes-table">
+                    <tr>
+                        <th>Title</th>
+                        <th>Subject</th>
+                        <th>Semester</th>
+                        <th>Size</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr data-sub="DBMS Lab">
+                        <td>SQL Queries — Unit 3</td><td>DBMS Lab</td><td>Sem 4</td><td>2.4MB</td><td>May 2</td>
+                        <td><div class="row-btns">
+                            <button class="btn-yellow" style="font-size:12px;padding:5px 9px;" onclick="showToast('Editing...','blue')">Edit</button>
+                            <button class="btn-red" style="font-size:12px;padding:5px 9px;" onclick="deleteRow(this)">Delete</button>
+                        </div></td>
+                    </tr>
+                    <tr data-sub="OS Lab">
+                        <td>Process Scheduling</td><td>OS Lab</td><td>Sem 4</td><td>1.8MB</td><td>Apr 28</td>
+                        <td><div class="row-btns">
+                            <button class="btn-yellow" style="font-size:12px;padding:5px 9px;" onclick="showToast('Editing...','blue')">Edit</button>
+                            <button class="btn-red" style="font-size:12px;padding:5px 9px;" onclick="deleteRow(this)">Delete</button>
+                        </div></td>
+                    </tr>
+                    <tr data-sub="CN Lab">
+                        <td>TCP/IP Protocols</td><td>CN Lab</td><td>Sem 5</td><td>3.1MB</td><td>Apr 25</td>
+                        <td><div class="row-btns">
+                            <button class="btn-yellow" style="font-size:12px;padding:5px 9px;" onclick="showToast('Editing...','blue')">Edit</button>
+                            <button class="btn-red" style="font-size:12px;padding:5px 9px;" onclick="deleteRow(this)">Delete</button>
+                        </div></td>
+                    </tr>
+                    <tr data-sub="Web Tech Lab">
+                        <td>HTML5 & CSS3 Notes</td><td>Web Tech Lab</td><td>Sem 3</td><td>1.2MB</td><td>Apr 20</td>
+                        <td><div class="row-btns">
+                            <button class="btn-yellow" style="font-size:12px;padding:5px 9px;" onclick="showToast('Editing...','blue')">Edit</button>
+                            <button class="btn-red" style="font-size:12px;padding:5px 9px;" onclick="deleteRow(this)">Delete</button>
+                        </div></td>
+                    </tr>
+                    <tr data-sub="DBMS Lab">
+                        <td>Normalization — Unit 4</td><td>DBMS Lab</td><td>Sem 4</td><td>2.0MB</td><td>Apr 18</td>
+                        <td><div class="row-btns">
+                            <button class="btn-yellow" style="font-size:12px;padding:5px 9px;" onclick="showToast('Editing...','blue')">Edit</button>
+                            <button class="btn-red" style="font-size:12px;padding:5px 9px;" onclick="deleteRow(this)">Delete</button>
+                        </div></td>
+                    </tr>
+                </table>
+                <p id="no-mnotes" style="display:none;color:#999;font-size:13px;margin-top:10px;">No notes found.</p>
+            </div>
+        </div>
+
+        <!-- ========== ANNOUNCEMENTS ========== -->
+        <div id="sec-announce" style="display:none;">
+            <div class="page-title">📢 Announcements</div>
+
+            <div class="two-col">
+
+                <!-- Send Announcement -->
+                <div class="card">
+                    <h3>Send New Announcement</h3>
+
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="ann-title" placeholder="e.g. Lab Rescheduled">
+                        <div class="error-msg" id="err-ann-title">Please enter a title.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Target Batch</label>
+                        <select id="ann-batch">
+                            <option>All Batches</option>
+                            <option>Batch A</option>
+                            <option>Batch B</option>
+                            <option>Batch C</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <select id="ann-priority">
+                            <option>Normal</option>
+                            <option>High</option>
+                            <option>Urgent</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea id="ann-message" rows="4" placeholder="Write your announcement here..."></textarea>
+                        <div class="error-msg" id="err-ann-msg">Please enter a message.</div>
+                    </div>
+
+                    <button class="btn-blue" style="width:100%;padding:11px;font-size:14px;" onclick="sendAnnouncement()">Send Announcement</button>
+                </div>
+
+                <!-- Past Announcements -->
+                <div class="card">
+                    <h3>Recent Announcements</h3>
+
+                    <div class="notif-item yellow">
+                        <div class="notif-title">Lab Rescheduled — DBMS</div>
+                        <div class="notif-sub">Batch A — DBMS Lab moved from Monday to Thursday.</div>
+                        <div class="notif-time">2 hours ago &nbsp;|&nbsp; <strong>High Priority</strong></div>
+                    </div>
+
+                    <div class="notif-item green">
+                        <div class="notif-title">Holiday Notice</div>
+                        <div class="notif-sub">All Batches — No lab on 15th May (State Holiday).</div>
+                        <div class="notif-time">3 days ago &nbsp;|&nbsp; Normal</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========== NOTIFICATIONS ========== -->
+        <div id="sec-notifications" style="display:none;">
+            <div class="page-title">🔔 Notifications</div>
+
+            <div style="margin-bottom:15px;">
+                <button class="btn-gray" onclick="showToast('All marked as read!','green')">Mark All as Read</button>
+            </div>
+
+            <div class="notif-item">
+                <div class="notif-title">Slot Booking Confirmed</div>
+                <div class="notif-sub">Lab 101 booked for Monday 9:00–10:00 — DBMS Lab Batch A</div>
+                <div class="notif-time">1 hour ago</div>
+            </div>
+
+            <div class="notif-item yellow">
+                <div class="notif-title">Slot Conflict Warning</div>
+                <div class="notif-sub">Lab 102 is already booked by Prof. Rajan on Tuesday 11–12</div>
+                <div class="notif-time">3 hours ago</div>
+            </div>
+
+            <div class="notif-item green">
+                <div class="notif-title">Notes Downloaded</div>
+                <div class="notif-sub">Your note "SQL Unit 3" was downloaded 12 times today</div>
+                <div class="notif-time">Yesterday</div>
+            </div>
+
+            <div class="notif-item">
+                <div class="notif-title">Booking Cancelled</div>
+                <div class="notif-sub">Lab 103 slot on Wed 14–15 was cancelled</div>
+                <div class="notif-time">2 days ago</div>
+            </div>
+        </div>
+
+        <!-- ========== SEARCH ========== -->
+        <div id="sec-search" style="display:none;">
+            <div class="page-title">🔍 Search</div>
+
+            <div class="card">
+                <div class="search-row" style="margin-bottom:10px;">
+                    <input type="text" id="t-global-search" placeholder="Search notes, batches, teachers, slots..." oninput="doTeacherSearch()">
+                    <select id="t-search-type" onchange="doTeacherSearch()">
+                        <option value="">All Types</option>
+                        <option value="note">Notes</option>
+                        <option value="batch">Batches</option>
+                        <option value="slot">Slots</option>
+                    </select>
+                </div>
+                <div id="t-search-results">
+                    <p style="color:#999;font-size:13px;">Start typing to see results...</p>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /main-content -->
+</div><!-- /page-wrapper -->
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+    // Set username
+    var user = localStorage.getItem("lms_user") || "Teacher";
+    document.getElementById("user-name").textContent = user;
+
+    // Role check
+    var role = localStorage.getItem("lms_role");
+    if (role && role !== "teacher") {
+        window.location.href = "student_dashboard.html";
+    }
+
+    // Section switching
+    function showSection(name, link) {
+        var sections = ["overview","timetable","booking","upload","notes","announce","notifications","search"];
+        for (var i = 0; i < sections.length; i++) {
+            document.getElementById("sec-" + sections[i]).style.display = "none";
+        }
+        document.getElementById("sec-" + name).style.display = "block";
+
+        var links = document.querySelectorAll(".sidebar a");
+        for (var j = 0; j < links.length; j++) {
+            links[j].classList.remove("active");
+        }
+        if (link) link.classList.add("active");
+    }
+
+    function logout() {
+        localStorage.removeItem("lms_user");
+        localStorage.removeItem("lms_role");
+        window.location.href = "login.html";
+    }
+
+    // Quick book
+    function quickBook(slot) {
+        showToast("Slot " + slot + " booked for Lab 101!", "green");
+    }
+
+    // Booking form submit
+    function submitBooking(e) {
+        e.preventDefault();
+        var lab     = document.getElementById("book-lab").value;
+        var sem     = document.getElementById("book-sem").value;
+        var batch   = document.getElementById("book-batch").value;
+        var date    = document.getElementById("book-date").value;
+        var slot    = document.getElementById("book-slot").value;
+        var subject = document.getElementById("book-subject").value.trim();
+        var valid   = true;
+
+        if (!lab)     { document.getElementById("err-lab").style.display="block"; valid=false; }
+        else          { document.getElementById("err-lab").style.display="none"; }
+        if (!sem)     { document.getElementById("err-sem").style.display="block"; valid=false; }
+        else          { document.getElementById("err-sem").style.display="none"; }
+        if (!batch)   { document.getElementById("err-batch").style.display="block"; valid=false; }
+        else          { document.getElementById("err-batch").style.display="none"; }
+        if (!date)    { document.getElementById("err-date").style.display="block"; valid=false; }
+        else          { document.getElementById("err-date").style.display="none"; }
+        if (!slot)    { document.getElementById("err-slot").style.display="block"; valid=false; }
+        else          { document.getElementById("err-slot").style.display="none"; }
+        if (!subject) { document.getElementById("err-subject").style.display="block"; valid=false; }
+        else          { document.getElementById("err-subject").style.display="none"; }
+
+        if (!valid) return;
+        showToast("Slot booked successfully!", "green");
+    }
+
+    // File chosen
+    function fileChosen(input) {
+        if (input.files[0]) {
+            document.getElementById("file-name").textContent = "Selected: " + input.files[0].name;
+        }
+    }
+
+    // Upload note
+    function uploadNote() {
+        var title   = document.getElementById("note-title").value.trim();
+        var subject = document.getElementById("note-subject-up").value;
+        var sem     = document.getElementById("note-sem-up").value;
+        var valid   = true;
+
+        if (!title)   { document.getElementById("err-note-title").style.display="block"; valid=false; }
+        else          { document.getElementById("err-note-title").style.display="none"; }
+        if (!subject) { document.getElementById("err-note-subject").style.display="block"; valid=false; }
+        else          { document.getElementById("err-note-subject").style.display="none"; }
+        if (!sem)     { document.getElementById("err-note-sem").style.display="block"; valid=false; }
+        else          { document.getElementById("err-note-sem").style.display="none"; }
+
+        if (!valid) return;
+        showToast("Note uploaded successfully!", "green");
+    }
+
+    // Delete row from table
+    function deleteRow(btn) {
+        btn.closest("tr").remove();
+        showToast("Note deleted.", "red");
+    }
+
+    // Delete note (upload tab)
+    function deleteNote(btn) {
+        btn.closest("tr").remove();
+        showToast("Note deleted.", "red");
+    }
+
+    // Send announcement
+    function sendAnnouncement() {
+        var title = document.getElementById("ann-title").value.trim();
+        var msg   = document.getElementById("ann-message").value.trim();
+        var valid = true;
+
+        if (!title) { document.getElementById("err-ann-title").style.display="block"; valid=false; }
+        else        { document.getElementById("err-ann-title").style.display="none"; }
+        if (!msg)   { document.getElementById("err-ann-msg").style.display="block"; valid=false; }
+        else        { document.getElementById("err-ann-msg").style.display="none"; }
+
+        if (!valid) return;
+        showToast("Announcement sent to students!", "green");
+    }
+
+    // Filter manage notes
+    function filterMNotes() {
+        var search  = document.getElementById("mnote-search").value.toLowerCase();
+        var subject = document.getElementById("mnote-subject").value;
+        var rows    = document.querySelectorAll("#manage-notes-table tr[data-sub]");
+        var count   = 0;
+
+        rows.forEach(function(row) {
+            var text   = row.innerText.toLowerCase();
+            var rowSub = row.getAttribute("data-sub");
+            var ok = text.includes(search) && (subject === "" || rowSub === subject);
+            row.style.display = ok ? "" : "none";
+            if (ok) count++;
+        });
+
+        document.getElementById("no-mnotes").style.display = count === 0 ? "block" : "none";
+    }
+
+    // Search
+    var searchData = [
+        { text: "SQL Queries Unit 3 - DBMS Lab", type: "note" },
+        { text: "Process Scheduling - OS Lab", type: "note" },
+        { text: "TCP/IP Protocols - CN Lab", type: "note" },
+        { text: "Batch A - Semester 4 - 30 students", type: "batch" },
+        { text: "Batch B - Semester 4 - 28 students", type: "batch" },
+        { text: "Batch C - Semester 5 - 25 students", type: "batch" },
+        { text: "Lab 101 Monday 9-10 Free", type: "slot" },
+        { text: "Lab 102 Tuesday 11-12 Free", type: "slot" },
+        { text: "Lab 103 Wednesday Busy", type: "slot" },
+    ];
+
+    function doTeacherSearch() {
+        var q    = document.getElementById("t-global-search").value.toLowerCase();
+        var type = document.getElementById("t-search-type").value;
+        var container = document.getElementById("t-search-results");
+
+        if (q.length < 2) {
+            container.innerHTML = '<p style="color:#999;font-size:13px;">Start typing to see results...</p>';
+            return;
+        }
+
+        var results = [];
+        searchData.forEach(function(item) {
+            if (item.text.toLowerCase().includes(q) && (type === "" || item.type === type)) {
+                results.push(item);
+            }
+        });
+
+        if (results.length === 0) {
+            container.innerHTML = '<p style="color:#999;font-size:13px;">No results found for "' + q + '"</p>';
+            return;
+        }
+
+        var icons = { note: "📄", batch: "👥", slot: "🗓️" };
+        var html = "<p style='font-size:12px;color:#666;margin-bottom:10px;'>" + results.length + " result(s) found</p>";
+        results.forEach(function(r) {
+            html += '<div style="padding:10px 12px;border:1px solid #eee;border-radius:6px;margin-bottom:8px;display:flex;gap:10px;align-items:center;">';
+            html += '<span style="font-size:20px;">' + (icons[r.type] || "📌") + '</span>';
+            html += '<div><div style="font-size:13px;font-weight:bold;">' + r.text + '</div>';
+            html += '<div style="font-size:11px;color:#999;">' + r.type.charAt(0).toUpperCase() + r.type.slice(1) + '</div></div>';
+            html += '</div>';
+        });
+        container.innerHTML = html;
+    }
+
+    // Toast
+    function showToast(msg, type) {
+        var t = document.getElementById("toast");
+        t.textContent = msg;
+        t.className = type || "";
+        t.style.display = "block";
+        setTimeout(function() { t.style.display = "none"; }, 3000);
+    }
+</script>
+
+</body>
+</html>

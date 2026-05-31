@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up - Lab Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #e8f0fe;
+            padding: 20px;
+        }
+
+        .signup-box {
+            background-color: white;
+            padding: 35px 40px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .signup-box h2 {
+            text-align: center;
+            color: #1a73e8;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+
+        .signup-box p.subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .two-field {
+            display: flex;
+            gap: 15px;
+        }
+
+        .two-field .form-group {
+            flex: 1;
+        }
+
+        .signup-box button[type="submit"] {
+            width: 100%;
+            padding: 11px;
+            background-color: #28a745;
+            color: white;
+            font-size: 15px;
+            border-radius: 5px;
+            border: none;
+            margin-top: 5px;
+            cursor: pointer;
+        }
+
+        .signup-box button[type="submit"]:hover {
+            background-color: #1e7e34;
+        }
+
+        .signup-box .bottom-link {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        /* hide semester/batch for teacher */
+        #student-fields { display: block; }
+    </style>
+</head>
+<body>
+
+<div class="signup-box">
+    <h2>🔬 LabNexus</h2>
+    <p class="subtitle">Create a new account</p>
+
+    <form onsubmit="doSignup(event)">
+
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Enter your full name">
+            <div class="error-msg" id="err-name">Name is required.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="Enter your email">
+            <div class="error-msg" id="err-email">Please enter a valid email.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Minimum 6 characters">
+            <div class="error-msg" id="err-pass">Password must be at least 6 characters.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role</label>
+            <select id="role" onchange="roleChanged(this.value)">
+                <option value="">-- Select Role --</option>
+                <option value="student">Student</option>
+                <option value="teacher">Teacher</option>
+            </select>
+            <div class="error-msg" id="err-role">Please select a role.</div>
+        </div>
+
+        <!-- Shown only for students -->
+        <div id="student-fields">
+            <div class="two-field">
+                <div class="form-group">
+                    <label for="semester">Semester</label>
+                    <select id="semester">
+                        <option value="">Select</option>
+                        <option>Semester 1</option>
+                        <option>Semester 2</option>
+                        <option>Semester 3</option>
+                        <option>Semester 4</option>
+                        <option>Semester 5</option>
+                        <option>Semester 6</option>
+                        <option>Semester 7</option>
+                        <option>Semester 8</option>
+                    </select>
+                    <div class="error-msg" id="err-sem">Select a semester.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="batch">Batch</label>
+                    <select id="batch">
+                        <option value="">Select</option>
+                        <option>Batch A</option>
+                        <option>Batch B</option>
+                        <option>Batch C</option>
+                        <option>Batch D</option>
+                    </select>
+                    <div class="error-msg" id="err-batch">Select a batch.</div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit">Create Account</button>
+
+        <div class="bottom-link">
+            Already have an account? <a href="login.html">Login</a>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    // Show or hide semester/batch based on role
+    function roleChanged(val) {
+        if (val === "teacher") {
+            document.getElementById("student-fields").style.display = "none";
+        } else {
+            document.getElementById("student-fields").style.display = "block";
+        }
+    }
+
+    function doSignup(e) {
+        e.preventDefault();
+
+        var name     = document.getElementById("name").value.trim();
+        var email    = document.getElementById("email").value.trim();
+        var password = document.getElementById("password").value.trim();
+        var role     = document.getElementById("role").value;
+        var semester = document.getElementById("semester").value;
+        var batch    = document.getElementById("batch").value;
+
+        var valid = true;
+
+        if (name === "") {
+            document.getElementById("err-name").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("err-name").style.display = "none";
+        }
+
+        if (email === "" || !email.includes("@")) {
+            document.getElementById("err-email").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("err-email").style.display = "none";
+        }
+
+        if (password.length < 6) {
+            document.getElementById("err-pass").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("err-pass").style.display = "none";
+        }
+
+        if (role === "") {
+            document.getElementById("err-role").style.display = "block";
+            valid = false;
+        } else {
+            document.getElementById("err-role").style.display = "none";
+        }
+
+        // Validate semester and batch only for students
+        if (role === "student") {
+            if (semester === "") {
+                document.getElementById("err-sem").style.display = "block";
+                valid = false;
+            } else {
+                document.getElementById("err-sem").style.display = "none";
+            }
+
+            if (batch === "") {
+                document.getElementById("err-batch").style.display = "block";
+                valid = false;
+            } else {
+                document.getElementById("err-batch").style.display = "none";
+            }
+        }
+
+        if (!valid) return;
+
+        // Save and go to dashboard
+        localStorage.setItem("lms_user", name);
+        localStorage.setItem("lms_role", role);
+
+        alert("Account created successfully! Redirecting to dashboard...");
+
+        if (role === "student") {
+            window.location.href = "student_dashboard.html";
+        } else {
+            window.location.href = "teacher_dashboard.html";
+        }
+    }
+</script>
+
+</body>
+</html>
